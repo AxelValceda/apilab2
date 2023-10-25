@@ -6,7 +6,7 @@ router.get('/',getProductos)
 router.get('/:id_usuario?',getProducto)
 router.post('/',addProducto)
 router.put('/:id_usuario?',actualizarProducto)
-router.delete('/',auth,borrarProducto)
+router.delete('/',borrarProducto)
 
 
 

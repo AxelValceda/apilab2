@@ -1,18 +1,10 @@
-
+const {getConnection}=require('../database/db')
 const jwt = require("jsonwebtoken");
-const mysql = require('mysql2');
-
-
-const connection = mysql.createConnection({
-    host:'localhost',
-    user:'root',
-    password:'nautico1290',
-    database:'laboratorio3'
-});
 
 
 
-const getUsuarios= (req, res) => {
+const getUsuarios  = async (req, res) => {
+  const connection = await getConnection();
     connection.query('SELECT * FROM usuarios', (error, results) => {
       if (error) throw error;
       if (results.length > 0) {
@@ -23,7 +15,8 @@ const getUsuarios= (req, res) => {
     });
   }; 
   
-  const getUsuario= (req, res) => {
+  const getUsuario= async(req, res) => {
+    const connection = await getConnection();
       const { id_usuario } = req.params;
       const sql = `SELECT * FROM usuarios WHERE id_usuario = ${connection.escape(id_usuario)}`;
       connection.query(sql, (error, result) => {
@@ -39,7 +32,8 @@ const getUsuarios= (req, res) => {
   
   
   
-    const addUsuario=(req, res) => {
+    const addUsuario=async(req, res) => {
+      const connection = await getConnection();
       const sql = 'INSERT INTO usuarios SET ?';
     
       const usuariosObj = {
@@ -56,8 +50,9 @@ const getUsuarios= (req, res) => {
     
   
   
-  const actualizarUsuario= (req, res)=> {
-      const { id_usuario } = req.params;
+  const actualizarUsuario= async(req, res)=> {
+    const connection = await getConnection();
+      const { id_usuario } = req.body;
       const  {nombre, email,contraseña } = req.body;
       const sql = `UPDATE usuarios SET nombre = '${nombre}', email= '${email}',contraseña = '${contraseña}' WHERE id_usuario =${id_usuario}`;
   
@@ -71,7 +66,8 @@ const getUsuarios= (req, res) => {
   }; 
   
   
-  const borrarUsuario= (req, res)=> {
+  const borrarUsuario= async(req, res)=> {
+    const connection = await getConnection();
      const {id_usuario} = req.body;
      const sql =  `DELETE FROM usuarios WHERE id_usuario= ${id_usuario}`;
   
@@ -83,7 +79,8 @@ const getUsuarios= (req, res) => {
   }; 
   
   //jwt login
-  const login= (req, res)=> {
+  const login= async(req, res)=> {
+    const connection = await getConnection();
     const {id_usuario}=req.body;
   
     const sql = `SELECT * FROM usuarios WHERE id_usuario = ${connection.escape(id_usuario)}`;
